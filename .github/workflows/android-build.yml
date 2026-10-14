@@ -10,15 +10,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      JAVA_HOME_17: /usr/lib/jvm/java-17-openjdk-amd64
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set execute permission for gradlew
+        run: chmod +x ./gradlew
+
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -36,7 +37,7 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug --no-daemon
 
-      - name: Build Release APK
+      - name: Build Release APK (unsigned if no keystore)
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -45,7 +46,7 @@ jobs:
         run: |
           if [ -n "$KEYSTORE_BASE64" ]; then
             echo "$KEYSTORE_BASE64" | base64 --decode > release.keystore
-            # Ajusta gradle.properties o signingConfigs para usar release.keystore y las variables
+            # Ajusta signingConfigs en app/build.gradle para usar release.keystore si lo deseas
           fi
           ./gradlew assembleRelease --no-daemon
 
