@@ -1,0 +1,31 @@
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Android Studio
+.idea/
+*.iml
+local.properties
+
+# Kotlin
+*.kotlin_module
+
+# Mac / Windows
+.DS_Store
+Thumbs.db
+
+# Keystore (nunca subir)
+*.jks
+*.keystore
+
+# Generated files
+captures/
+.externalNativeBuild/
+
+# JetBrains
+/.idea
+/.idea_modules
+
+# Misc
+*.log
